@@ -1,2 +1,2 @@
-# VanillaToolHeadSwapper
-A Minecraft Mod about swapping Vanilla tool heads for other materials.
+# ToolHeadSwapper
+A Minecraft Mod about swapping tool's heads for other materials.
