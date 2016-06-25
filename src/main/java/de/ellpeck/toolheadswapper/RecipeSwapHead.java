@@ -78,14 +78,19 @@ public class RecipeSwapHead implements IRecipe{
     private static ItemStack getNewTool(ItemStack oldStack, ItemStack repair){
         Set<String> toolClasses = oldStack.getItem().getToolClasses(oldStack);
         if(toolClasses != null && !toolClasses.isEmpty()){
-            for(ItemTool newItem : ToolHeadSwapper.ALL_TOOLS.keySet()){
+            for(ItemTool newItem : ToolHeadSwapper.ALL_TOOLS){
                 if(newItem != oldStack.getItem()){
                     if(newItem.getMaxDamage() >= oldStack.getItem().getMaxDamage()){
                         Item.ToolMaterial newMaterial = newItem.getToolMaterial();
                         if(newMaterial != null){
                             if(OreDictionary.itemMatches(newMaterial.getRepairItemStack(), repair, false)){
-                                int damageTaken = oldStack.getMaxDamage()-oldStack.getItemDamage();
-                                ItemStack newStack = new ItemStack(newItem, 1, newItem.getMaxDamage()-damageTaken);
+                                int newDamage = 0;
+                                if(ToolHeadSwapper.keepDurability){
+                                    int damageTaken = oldStack.getMaxDamage()-oldStack.getItemDamage();
+                                    newDamage = newItem.getMaxDamage()-damageTaken;
+                                }
+
+                                ItemStack newStack = new ItemStack(newItem, 1, newDamage);
                                 Set<String> newToolClasses = newItem.getToolClasses(newStack);
                                 if(newToolClasses != null && newToolClasses.equals(toolClasses)){
                                     return newStack;

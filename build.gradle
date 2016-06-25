@@ -62,10 +62,3 @@ task deobfJar(type: Jar) {
     from sourceSets.main.java
     classifier = 'dev'
 }
-
-task apiJar(type: Jar) {
-    from sourceSets.main.output
-    from sourceSets.main.java
-    classifier = 'api'
-    include 'de/ellpeck/actuallyadditions/api/**'
-}
