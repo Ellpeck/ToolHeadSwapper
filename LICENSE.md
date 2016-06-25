@@ -18,9 +18,9 @@ Everything that is not listed below applies to the above.
 * When modifying or using code, always explicitly credit Ellpeck as the creator.
 * When making a review/spotlight containing the mod or using it in a modpack, always make clear that the mod is used.
 * When it comes to the code, always link back to the official repository.
-* When it comes to the mod, always link back to the the official Minecraft Forum thread or CurseForge page.
+* When it comes to the mod, always link back to the the official CurseForge page.
 
 ### NOTES
 * Parts of this license, especially restrictive ones, can be ignored with personal permission. Said permission, however, will only be given to people I know or someone who has a very good reason for needing it.
 
-© 2015-2016 Ellpeck
+© 2016 Ellpeck

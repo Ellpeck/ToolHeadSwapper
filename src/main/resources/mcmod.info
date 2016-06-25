@@ -1,0 +1,19 @@
+[
+{
+  "modid": "toolheadswapper",
+  "name": "Tool Head Swapper",
+  "description": "A Mod about swapping tool's heads for other materials.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "http://github.com/Ellpeck/ToolHeadSwapper",
+  "updateUrl": "",
+  "authorList": [ "Ellpeck" ],
+  "credits": "Author: Ellpeck",
+  "logoFile": "assets/toolheadswapper/textures/logo.png",
+  "screenshots": [
+  ],
+  "parent":"",
+  "dependencies": [
+  ]
+}
+]
