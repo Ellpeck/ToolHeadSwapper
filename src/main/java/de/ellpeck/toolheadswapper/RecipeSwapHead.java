@@ -8,10 +8,24 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nullable;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 
 public class RecipeSwapHead implements IRecipe{
+
+    private static final String[] COMPARE_BASE = new String[]{"Pickaxe", "Axe", "Shovel", "Sword", "Hoe"};
+    private static final Map<String, Integer> COMPARE = new HashMap<String, Integer>();
+
+    static{
+        for(int i = 0; i < COMPARE_BASE.length; i++){
+            String s = COMPARE_BASE[i];
+            //Make it ignore things like "Paxel" because it'd need Axe, _axe or axe_
+            COMPARE.put(s, i);
+
+            String sLower = s.toLowerCase(Locale.ROOT);
+            COMPARE.put("_"+sLower, i);
+            COMPARE.put(sLower+"_", i);
+        }
+    }
 
     @Override
     public boolean matches(InventoryCrafting inv, World world){
@@ -102,14 +116,21 @@ public class RecipeSwapHead implements IRecipe{
         }
         else{
             //This is a hacky workaround for mods that don't specify tool classes
-            String[] compare = new String[]{"pickaxe", "axe", "shovel", "spade", "sword", "hoe"};
-            String[] compareNot = new String[]{"", "pick"};
+            String reg1 = stack1.getItem().getRegistryName().toString();
+            String reg2 = stack2.getItem().getRegistryName().toString();
 
-            String reg1 = stack1.getItem().getRegistryName().toString().toLowerCase(Locale.ROOT);
-            String reg2 = stack2.getItem().getRegistryName().toString().toLowerCase(Locale.ROOT);
-            for(int i = 0; i < compare.length; i++){
-                if(reg1.contains(compare[i]) && reg2.contains(compare[i]) && (compareNot.length <= i || (!reg1.contains(compareNot[i]) && !reg2.contains(compareNot[i])))){
-                    return true;
+            int compared1 = -1;
+            int compared2 = -1;
+            for(Map.Entry<String, Integer> s : COMPARE.entrySet()){
+                if(reg1.contains(s.getKey())){
+                    compared1 = s.getValue();
+                }
+                if(reg2.contains(s.getKey())){
+                    compared2 = s.getValue();
+                }
+
+                if(compared1 >= 0 && compared2 >= 0){
+                    return compared1 == compared2;
                 }
             }
         }
