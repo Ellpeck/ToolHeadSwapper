@@ -3,11 +3,9 @@ package de.ellpeck.toolheadswapper;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 import java.util.Set;
@@ -27,8 +25,8 @@ public class RecipeSwapHead implements IRecipe{
         for(int iterate = 0; iterate < 2; iterate++){
             for(int i = 0; i < inv.getSizeInventory(); i++){
                 ItemStack stack = inv.getStackInSlot(i);
-                if(stack != null){
-                    boolean isTool = stack.getItem() instanceof ItemTool;
+                if(stack != null && stack.getItem() != null){
+                    boolean isTool = stack.getItem().isRepairable();
                     if(iterate == 0){
                         //Find the tool first
                         if(isTool){
@@ -78,23 +76,20 @@ public class RecipeSwapHead implements IRecipe{
     private static ItemStack getNewTool(ItemStack oldStack, ItemStack repair){
         Set<String> toolClasses = oldStack.getItem().getToolClasses(oldStack);
         if(toolClasses != null && !toolClasses.isEmpty()){
-            for(ItemTool newItem : ToolHeadSwapper.ALL_TOOLS){
+            for(Item newItem : ToolHeadSwapper.ALL_TOOLS){
                 if(newItem != oldStack.getItem()){
                     if(newItem.getMaxDamage() >= oldStack.getItem().getMaxDamage()){
-                        Item.ToolMaterial newMaterial = newItem.getToolMaterial();
-                        if(newMaterial != null){
-                            if(OreDictionary.itemMatches(newMaterial.getRepairItemStack(), repair, false)){
-                                int newDamage = 0;
-                                if(ToolHeadSwapper.keepDurability){
-                                    int damageTaken = oldStack.getMaxDamage()-oldStack.getItemDamage();
-                                    newDamage = newItem.getMaxDamage()-damageTaken;
-                                }
+                        int newDamage = 0;
+                        if(ToolHeadSwapper.keepDurability){
+                            int damageTaken = oldStack.getMaxDamage()-oldStack.getItemDamage();
+                            newDamage = newItem.getMaxDamage()-damageTaken;
+                        }
 
-                                ItemStack newStack = new ItemStack(newItem, 1, newDamage);
-                                Set<String> newToolClasses = newItem.getToolClasses(newStack);
-                                if(newToolClasses != null && newToolClasses.equals(toolClasses)){
-                                    return newStack;
-                                }
+                        ItemStack newStack = new ItemStack(newItem, 1, newDamage);
+                        if(newItem.getIsRepairable(newStack, repair)){
+                            Set<String> newToolClasses = newItem.getToolClasses(newStack);
+                            if(newToolClasses != null && newToolClasses.equals(toolClasses)){
+                                return newStack;
                             }
                         }
                     }

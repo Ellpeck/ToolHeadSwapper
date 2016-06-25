@@ -1,8 +1,6 @@
 package de.ellpeck.toolheadswapper;
 
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
@@ -24,7 +22,7 @@ public class ToolHeadSwapper{
     public static final String VERSION = "@VERSION@";
     public static final Logger LOGGER = LogManager.getLogger(NAME);
 
-    public static final List<ItemTool> ALL_TOOLS = new ArrayList<ItemTool>();
+    public static final List<Item> ALL_TOOLS = new ArrayList<Item>();
     private static final List<Item> EXCEPTIONS = new ArrayList<Item>();
     public static boolean keepDurability;
 
@@ -51,19 +49,12 @@ public class ToolHeadSwapper{
     @Mod.EventHandler
     public static void postInit(FMLPostInitializationEvent event){
         for(Item item : Item.REGISTRY){
-            if(item instanceof ItemTool && !EXCEPTIONS.contains(item)){
-                ItemTool tool = (ItemTool)item;
-                Item.ToolMaterial material = tool.getToolMaterial();
-                if(material != null){
-                    ItemStack repairStack = material.getRepairItemStack();
-                    if(repairStack != null){
-                        ALL_TOOLS.add(tool);
-                    }
+            if(!EXCEPTIONS.contains(item)){
+                if(item.isRepairable()){
+                    ALL_TOOLS.add(item);
                 }
             }
         }
-
-        LOGGER.info("Found "+ALL_TOOLS.size()+" tools for conversion recipes!");
 
         GameRegistry.addRecipe(new RecipeSwapHead());
         RecipeSorter.register(MOD_ID, RecipeSwapHead.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
