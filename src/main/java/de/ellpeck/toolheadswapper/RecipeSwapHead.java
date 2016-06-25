@@ -122,10 +122,12 @@ public class RecipeSwapHead implements IRecipe{
             int compared1 = -1;
             int compared2 = -1;
             for(Map.Entry<String, Integer> s : COMPARE.entrySet()){
-                if(reg1.contains(s.getKey())){
+                String key = s.getKey();
+                String keyLower = s.getKey().toLowerCase(Locale.ROOT);
+                if(reg1.contains(key) || reg1.startsWith(keyLower)){
                     compared1 = s.getValue();
                 }
-                if(reg2.contains(s.getKey())){
+                if(reg2.contains(key) || reg2.startsWith(keyLower)){
                     compared2 = s.getValue();
                 }
 
