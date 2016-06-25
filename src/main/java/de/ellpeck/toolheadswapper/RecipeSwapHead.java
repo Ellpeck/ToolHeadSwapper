@@ -8,6 +8,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nullable;
+import java.util.Locale;
 import java.util.Set;
 
 public class RecipeSwapHead implements IRecipe{
@@ -74,29 +75,45 @@ public class RecipeSwapHead implements IRecipe{
     }
 
     private static ItemStack getNewTool(ItemStack oldStack, ItemStack repair){
-        Set<String> toolClasses = oldStack.getItem().getToolClasses(oldStack);
-        if(toolClasses != null && !toolClasses.isEmpty()){
-            for(Item newItem : ToolHeadSwapper.ALL_TOOLS){
-                if(newItem != oldStack.getItem()){
-                    if(newItem.getMaxDamage() >= oldStack.getItem().getMaxDamage()){
-                        int newDamage = 0;
-                        if(ToolHeadSwapper.keepDurability){
-                            int damageTaken = oldStack.getMaxDamage()-oldStack.getItemDamage();
-                            newDamage = newItem.getMaxDamage()-damageTaken;
-                        }
+        for(Item newItem : ToolHeadSwapper.ALL_TOOLS){
+            if(newItem != oldStack.getItem()){
+                if(newItem.getMaxDamage() >= oldStack.getItem().getMaxDamage()){
+                    int newDamage = 0;
+                    if(ToolHeadSwapper.keepDurability){
+                        int damageTaken = oldStack.getMaxDamage()-oldStack.getItemDamage();
+                        newDamage = newItem.getMaxDamage()-damageTaken;
+                    }
 
-                        ItemStack newStack = new ItemStack(newItem, 1, newDamage);
-                        if(newItem.getIsRepairable(newStack, repair)){
-                            Set<String> newToolClasses = newItem.getToolClasses(newStack);
-                            if(newToolClasses != null && newToolClasses.equals(toolClasses)){
-                                return newStack;
-                            }
-                        }
+                    ItemStack newStack = new ItemStack(newItem, 1, newDamage);
+                    if(newItem.getIsRepairable(newStack, repair) && areSameToolType(oldStack, newStack)){
+                        return newStack;
                     }
                 }
             }
         }
         return null;
+    }
+
+    private static boolean areSameToolType(ItemStack stack1, ItemStack stack2){
+        Set<String> toolClasses1 = stack1.getItem().getToolClasses(stack1);
+        Set<String> toolClasses2 = stack2.getItem().getToolClasses(stack2);
+        if(toolClasses1 != null && toolClasses2 != null && !toolClasses1.isEmpty() && toolClasses1.equals(toolClasses2)){
+            return true;
+        }
+        else{
+            //This is a hacky workaround for mods that don't specify tool classes
+            String[] compare = new String[]{"pickaxe", "axe", "shovel", "spade", "sword", "hoe"};
+            String[] compareNot = new String[]{"", "pick"};
+
+            String reg1 = stack1.getItem().getRegistryName().toString().toLowerCase(Locale.ROOT);
+            String reg2 = stack2.getItem().getRegistryName().toString().toLowerCase(Locale.ROOT);
+            for(int i = 0; i < compare.length; i++){
+                if(reg1.contains(compare[i]) && reg2.contains(compare[i]) && (compareNot.length <= i || (!reg1.contains(compareNot[i]) && !reg2.contains(compareNot[i])))){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override
