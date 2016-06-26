@@ -1,3 +1,13 @@
+/*
+ * This file ("ToolHeadSwapper.java") is part of the Tool Head Swapper mod for Minecraft.
+ * It is created and owned by Ellpeck and distributed
+ * under the Tool Head Swapper License to be found at
+ * https://github.com/Ellpeck/ToolHeadSwapper/blob/master/LICENSE.md
+ * View the source code at https://github.com/Ellpeck/ToolHeadSwapper
+ *
+ * © 2016 Ellpeck
+ */
+
 package de.ellpeck.toolheadswapper;
 
 import net.minecraft.item.Item;
@@ -8,8 +18,6 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.RecipeSorter;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +28,6 @@ public class ToolHeadSwapper{
     public static final String MOD_ID = "toolheadswapper";
     public static final String NAME = "Tool Head Swapper";
     public static final String VERSION = "@VERSION@";
-    public static final Logger LOGGER = LogManager.getLogger(NAME);
 
     public static final List<Item> ALL_TOOLS = new ArrayList<Item>();
     private static final List<Item> EXCEPTIONS = new ArrayList<Item>();

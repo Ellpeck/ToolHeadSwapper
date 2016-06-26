@@ -1,3 +1,13 @@
+/*
+ * This file ("RecipeSwapHead.java") is part of the Tool Head Swapper mod for Minecraft.
+ * It is created and owned by Ellpeck and distributed
+ * under the Tool Head Swapper License to be found at
+ * https://github.com/Ellpeck/ToolHeadSwapper/blob/master/LICENSE.md
+ * View the source code at https://github.com/Ellpeck/ToolHeadSwapper
+ *
+ * © 2016 Ellpeck
+ */
+
 package de.ellpeck.toolheadswapper;
 
 import net.minecraft.inventory.InventoryCrafting;
@@ -8,7 +18,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 public class RecipeSwapHead implements IRecipe{
 
@@ -25,11 +38,6 @@ public class RecipeSwapHead implements IRecipe{
             COMPARE.put("_"+sLower, i);
             COMPARE.put(sLower+"_", i);
         }
-    }
-
-    @Override
-    public boolean matches(InventoryCrafting inv, World world){
-        return getOutputFromInputs(inv, false) != null;
     }
 
     private static ItemStack getOutputFromInputs(InventoryCrafting inv, boolean breakWhenFound){
@@ -82,12 +90,6 @@ public class RecipeSwapHead implements IRecipe{
         return foundSwap ? newTool : null;
     }
 
-    @Nullable
-    @Override
-    public ItemStack getCraftingResult(InventoryCrafting inv){
-        return getOutputFromInputs(inv, false);
-    }
-
     private static ItemStack getNewTool(ItemStack oldStack, ItemStack repair){
         for(Item newItem : ToolHeadSwapper.ALL_TOOLS){
             if(newItem != oldStack.getItem()){
@@ -137,6 +139,17 @@ public class RecipeSwapHead implements IRecipe{
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean matches(InventoryCrafting inv, World world){
+        return getOutputFromInputs(inv, false) != null;
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getCraftingResult(InventoryCrafting inv){
+        return getOutputFromInputs(inv, false);
     }
 
     @Override
