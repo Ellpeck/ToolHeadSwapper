@@ -102,6 +102,9 @@ public class RecipeSwapHead implements IRecipe{
 
                     ItemStack newStack = new ItemStack(newItem, 1, newDamage);
                     if(newItem.getIsRepairable(newStack, repair) && areSameToolType(oldStack, newStack)){
+                        if(oldStack.hasTagCompound()){
+                            newStack.setTagCompound(oldStack.getTagCompound().copy());
+                        }
                         return newStack;
                     }
                 }
